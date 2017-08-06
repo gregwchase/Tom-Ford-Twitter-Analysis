@@ -1,9 +1,9 @@
-#TOM FORD Twitter Analysis
+# TOM FORD Twitter Analysis
 
 ![](Tom Ford Logo 2.jpg)
 
 
-##Background Information and Disclaimer
+## Background Information and Disclaimer
 The fashion industry changes season to season. A collection can be designed, but the customer should always be the priority. More importantly, what are they saying? What do they think of the new collection? How likely are they to buy an item? What item(s) generated the most "buzz" in the overall collection? All questions a fashion house would want answers to.
 
 This notebook walks through a personal project of interest: what are people talking about in relation to the brand TOM FORD?
@@ -14,15 +14,15 @@ The hashtag that was analyzed is "#tomford". The final product is a word cloud a
 
 For creating your own word cloud, reference the tutorial [A Simple Twitter Data Mining Trip](http://rpubs.com/Antreas93/219057), by Antreas Antoniou.
 
-**Disclaimer: Please note that I am not employed by Tom Ford International. This project was taken on due to personal interest in the brand.**
+**Disclaimer: Please note that I am not employed by Tom Ford International. This was a project of personal interest.**
 
 
-##Software Requirements
+## Software Requirements
 1. R 3.2.5 or greater
 2. RStudio 1.0.4 or greater
 
 
-###Load Packages
+### Load Packages
 
 ```{r}
 library(base64enc)
@@ -36,7 +36,7 @@ library(wordcloud)
 ```
 
 
-###Twitter Authentication
+### Twitter Authentication
 
 In order to access tweets, you'll need to create a Twitter app [here](https://apps.twitter.com/). Using `setup_twitter_oauth` will require a consumer key, consumer secret key, access token, and access secret token.
 
@@ -49,18 +49,18 @@ auth <- setup_twitter_oauth(# Consumer Key,
 ```
 
 
-###Request Tweets
+### Request Tweets
 You now have the ability to request tweets. Be advised you can only request 5000 tweets per hour. Additionally, you can only request tweets within a period up to 7 days in the past.
 
 ```{r}
-tf <- searchTwitter("#tomford", 
+tf <- searchTwitter("#tomford",
                     n = 2500, # Request up to 5000 tweets per hour
                     lang = "en"
 )
 ```
 
 
-###Remove Non Text Items
+### Remove Non Text Items
 After requesting the tweets, they all must be prepped for the wordcloud.
 
 ```{r}
@@ -71,7 +71,7 @@ tfText <- gsub("https","",tfText)
 tfText <- str_replace_all(tfText,"[^a-zA-Z\\s]", " ")
 ```
 
-###Create The Corpus
+### Create The Corpus
 This block of code creates the corpus, and a term document matrix.
 
 ```{r}
@@ -85,7 +85,7 @@ tdm <- TermDocumentMatrix(
 )
 ```
 
-###Word Frequency
+### Word Frequency
 The penultimate step is to create a matrix of the words, sorted by how often they occur. This is then converted into a data frame.
 
 ```{r}
@@ -102,29 +102,30 @@ topWords
 ```
 
 
-###Create The Wordcloud
+### Create The Wordcloud
 Finally, the wordcloud is created.
 
 ```{r}
-tfWordcloud <- wordcloud(words$word, words$freq, random.order = FALSE,scale=c(3,0.5), 
+tfWordcloud <- wordcloud(words$word, words$freq, random.order = FALSE,scale=c(3,0.5),
                          colors = brewer.pal(8, "PiYG"))
 ```
+
 ![](Tom Ford Wordcloud.jpeg)
 
-###Post Analysis Thoughts
+### Post Analysis Thoughts
 
 1. Since Twitter only allows you to pull data up to one week in the past, you'll want to perform analysis of interest sooner than later. As Twitter mentions: "Our search service is not meant to be an exhaustive archive of public tweets and not all tweets are indexed or returned."
 
 2. Within the word cloud, what's noticeable is the most used word after "tom" and "ford" is "auction". Compared to the top 10 words, "auction" is the outlier. Why "auction" is mentioned so frequently would require deeper analysis of the tweets, along with the context of the word "auction".
 
-3. Since the size of the word relates to frequency of occurence, something noticeable in the word cloud is the word "nocturnalanimals" (just below "auction"). While this may look out of place, this is in reference to the film "Nocturnal Animals", which is directed by Tom Ford. At the time of this project, the film is set to debut on November 23, 2016. This suggests people are talking about the film on Twitter, and using the hashtag "#tomford" when tweeting about the film itself.
+3. Since the size of the word relates to frequency of occurence, something noticeable in the word cloud is the word "nocturnalanimals" (just below "auction"). While this may look out of place, this is in reference to the film "Nocturnal Animals", which Ford directed. At the time of this project, the film is set to debut on November 23, 2016. This suggests people are talking about the film on Twitter, and using the hashtag "#tomford" when tweeting about the film itself.
 
-###Recommendations
+### Recommendations
 
 1. Exploring the context of words would be another task to perform. Other than the word "auction", the other words are relevant to the brand. Tom Ford designs dark clothing often, which explains why "brown" and "black" appear frequently. The word "leather" could be in reference to leather clothing, or the fragrance Tuscan Leather. Finally, "sunglasses" could also be researched in more detail. Are users talking about men's sunglasses, women's sunglasses, a certain model, etc.?
 
 2. More analysis during fashion shows would be very applicable. On September 7, 2016, Tom Ford released his Autumn/ Winter 2016 collection; by September 8, 2016, the hashtags "#tomford" and "#TFAW16" were trending on Twitter. Because of this, it would be advisable to request tweets using both hashtags, and see what people are tweeting about in the days leading up the fashion show, and after the collection has been released.
 
-###Closing Thoughts
+### Closing Thoughts
 
 As someone who became a fan of Tom Ford years ago, this was a project I'd wanted to do for a while. Upon examining the results, it's interesting to now view what Twitter users talk about with respect to Tom Ford. A more detailed analysis may be conducted in a future project. For the time being, this project serves as an example to fashion houses (and other businesses), and shows that the analysis conducted in this project can help a business gauge what users/ consumers are talking about, which in turn can assist businesses with relevant business decisions.
